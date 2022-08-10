@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const SignUp = () => {
+  const navigate = useNavigate();
+  const { store, actions } = useContext(Context);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    actions.syncTokenFromSessionStore();
+    if (store.token) {
+      navigate("/");
+    }
+  });
+
   return (
     <div>
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
@@ -23,6 +40,9 @@ export const SignUp = () => {
                               type="text"
                               id="form3Example1c"
                               className="form-control"
+                              onChange={(e) => {
+                                setFirstName(e.target.value);
+                              }}
                             />
                             <label className="form-label" for="form3Example1c">
                               First Name
@@ -37,6 +57,9 @@ export const SignUp = () => {
                               type="text"
                               id="form3Example3c"
                               className="form-control"
+                              onChange={(e) => {
+                                setLastName(e.target.value);
+                              }}
                             />
                             <label className="form-label" for="form3Example3c">
                               Last Name
@@ -51,9 +74,29 @@ export const SignUp = () => {
                               type="text"
                               id="form3Example4c"
                               className="form-control"
+                              onChange={(e) => {
+                                setUserName(e.target.value);
+                              }}
                             />
                             <label className="form-label" for="form3Example4c">
                               Username
+                            </label>
+                          </div>
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center mb-4">
+                          <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
+                          <div className="form-outline flex-fill mb-0">
+                            <input
+                              type="text"
+                              id="form3Example4c"
+                              className="form-control"
+                              onChange={(e) => {
+                                setEmail(e.target.value);
+                              }}
+                            />
+                            <label className="form-label" for="form3Example4c">
+                              Email
                             </label>
                           </div>
                         </div>
@@ -65,6 +108,9 @@ export const SignUp = () => {
                               type="password"
                               id="form3Example4cd"
                               className="form-control"
+                              onChange={(e) => {
+                                setPassword(e.target.value);
+                              }}
                             />
                             <label className="form-label" for="form3Example4cd">
                               Password
@@ -89,12 +135,30 @@ export const SignUp = () => {
                         </div>
 
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <button
-                            type="button"
-                            className="btn btn-primary btn-lg"
-                          >
-                            Register
-                          </button>
+                          <input
+                            type="submit"
+                            value="Submit"
+                            onClick={() => {
+                              if (
+                                firstName == "" ||
+                                lastName == "" ||
+                                email == "" ||
+                                userName == "" ||
+                                password == ""
+                              ) {
+                                alert("all fields are required");
+                              } else {
+                                actions.createUser(
+                                  firstName,
+                                  lastName,
+                                  email,
+                                  userName,
+                                  password,
+                                  navigate("/login")
+                                );
+                              }
+                            }}
+                          />
                         </div>
                       </form>
                     </div>
