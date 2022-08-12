@@ -40,3 +40,38 @@ class User(db.Model):
 
     def checkpassword(self,password):
         return check_password_hash(self.password, password)
+
+
+
+class Account(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship("User")
+
+    def __repr__(self):
+        return f'<Account {self.id}'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "user": self.user
+
+        }
+# _______________________________________________________________________________________________
+class Favorites(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    favorites = db.Column(db.String(50), unique=False, nullable=True)
+    
+
+    def __repr__(self):
+        return f'<User {self.favorites}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "favorites": self.favorites,
+        }
+
+# _______________________________________________________________________________________________
+

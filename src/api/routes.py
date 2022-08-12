@@ -1,21 +1,20 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint, flash
-from api.models import db, User
+from api.models import db, User, Account, Favorites
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from argon2 import PasswordHasher
+
 from dotenv import load_dotenv
 import os
 
-api = Blueprint('api', __name__)
+
 load_dotenv()
 
 ph = PasswordHasher()
 api = Blueprint('api', __name__)
 
 
+#____________________________________________________________________________________________________
 
 @api.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -89,7 +88,7 @@ def user():
 
     return jsonify(response_body), 200
 
-
+#____________________________________________________________________________________________________
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
@@ -113,7 +112,7 @@ def create_token():
     
 
 
-
+#____________________________________________________________________________________________________
 
 @ api.route('/account', methods=['GET'])
 @ jwt_required()
@@ -133,6 +132,9 @@ def accounts():
     return jsonify(account_info)
 
 
+
+
+
 @api.route('/account/<int:id>', methods=['DELETE'])
 def del_account(id):
     account_data = Account.query.filter_by(id=id).delete()
@@ -140,4 +142,24 @@ def del_account(id):
 
     return 'Account deleted', 204
 
+
+@api.route('/favorites', methods=['GET'])
+def favorites():
+
+    favorites_data = Favorites.query.all()
+    response_body = [favorites.serialize() for favorite in favorites_data]
+    return jsonify(response_body), 200
+
+
+@api.route('/favorites/<int:id>', methods=['DELETE'])
+def del_favorites(id):
+    favorites_data = Favorites.query.filter_by(id=id).delete()
+    db.session.commit()
+
+    return 'Favorites deleted', 204
+
+@api.route('/lesson1_vocab/<string:mandarin>', methods=['GET'])
+def getWords(mandarin):
+    mandarin = Lesson1_vocab.query.filter_by(word=mandarin).one_or_none()
+    return jsonify(mandarin.serialize()), 200
 
