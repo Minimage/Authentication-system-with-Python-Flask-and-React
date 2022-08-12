@@ -18,21 +18,34 @@ export const Navbar = () => {
     <nav className="navbar navbar-light bg-light">
       <div className="container">
         <Link to="/">
-          <span className="navbar-brand mb-0 h1">React Boilerplate</span>
+          <span className="btn btn-primary">Home</span>
         </Link>
         <div className="ml-auto">
           <Link to="/Login">
-            <button className="btn btn-primary">Login</button>
+            <button className={store.token ? "hide" : " show btn btn-primary"}>
+              Login
+            </button>
           </Link>
           <Link to="/Signup">
-            <button className="btn btn-primary" style={{ marginLeft: "10px" }}>
+            <button
+              className={store.token ? "hide" : " show btn btn-primary"}
+              style={{ marginLeft: "10px" }}
+            >
               Signup
             </button>
           </Link>
 
+          <Link to="private">
+            <button
+              className={!store.token ? "hide" : " show btn btn-primary"}
+              style={{ marginLeft: "10px" }}
+            >
+              Private
+            </button>
+          </Link>
           <button
-            style={{ textDecoration: "underline", color: "blue" }}
-            className="route mb-0 h1"
+            className={!store.token ? "hide" : "show btn btn-primary"}
+            style={{ marginLeft: "10px" }}
             onClick={() => {
               actions.logout();
               // <Link to={"/ratings"}>actions.logout()</Link>;
@@ -48,8 +61,6 @@ export const Navbar = () => {
           >
             Log Out
           </button>
-
-          {store.token ? "hello" : "nothing"}
         </div>
       </div>
     </nav>

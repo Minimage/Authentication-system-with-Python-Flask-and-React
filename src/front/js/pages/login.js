@@ -26,7 +26,7 @@ export const Login = () => {
   useEffect(() => {
     actions.syncTokenFromSessionStore();
     if (store.token) {
-      navigate("/");
+      navigate("/private");
     }
   });
 

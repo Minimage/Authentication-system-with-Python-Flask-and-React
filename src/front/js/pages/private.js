@@ -6,6 +6,8 @@ export const PrivatePage = () => {
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
 
+  console.log(store);
+
   useEffect(() => {
     actions.syncTokenFromSessionStore();
     if (!store.token) {
