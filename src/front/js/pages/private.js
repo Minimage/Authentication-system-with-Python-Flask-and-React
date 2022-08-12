@@ -20,10 +20,6 @@ export const PrivatePage = () => {
       </div>
     );
   } else {
-    return (
-      <div>
-        <h1>Needs to go home</h1>
-      </div>
-    );
+    return <div></div>;
   }
 };
